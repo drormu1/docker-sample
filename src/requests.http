@@ -1,0 +1,30 @@
+### Get all categories
+GET http://localhost:3000/categories
+Content-Type: application/json
+
+###
+
+### Create a new category
+POST http://localhost:3000/categories
+Content-Type: application/json
+
+{
+  "title": "New Category"
+}
+
+###
+
+### Get all users
+GET http://localhost:3000/users
+Content-Type: application/json
+
+###
+
+### Create a new user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}

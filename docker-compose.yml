@@ -1,0 +1,37 @@
+#version: '3.8'
+
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: MsSqlServer2019
+    environment:           
+      - MSSQL_PID=Developer # or another valid edition
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password_01
+    networks:
+      - net-1
+    ports:
+      - 1433:1433
+    volumes:
+      - C:/volumes/mssql_2019_data:/var/opt/mssql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    user: "1000:1000"  # Run Elasticsearch as a non-root user (replace with an appropriate user ID if needed)
+    networks:
+      - net-1        
+    ports:
+      - "9200:9200"
+    volumes:
+      - C:/volumes/elasticsearch:/usr/share/elasticsearch/data    
+
+networks:
+  net-1:
+    driver: bridge
+
+
+    
