@@ -1,13 +1,11 @@
 import express from 'express';
-import "reflect-metadata";
-
+import 'reflect-metadata';
+import { connectDatabase } from './services/typeormService'; // Import database connection
+import { getUsers, createUser } from './controllers/user.controller';
 import { getCategories, createCategory } from './controllers/category.controller';
-import { connectDatabase } from './services/typeormService';  // Import database connection
-import { UserController } from './controllers/user.controller';
-import sql from 'mssql';
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON request bodies
 
 const startServer = async () => {
     try {
@@ -16,9 +14,8 @@ const startServer = async () => {
         // Define routes
         app.get('/categories', getCategories);
         app.post('/categories', createCategory);
-        const userController = new UserController();
-        app.get('/users', userController.getUsers);
-        app.post('/users', userController.addUser);
+        app.get('/users', getUsers);
+        app.post('/users', createUser);
 
         // Start the server
         const PORT = process.env.PORT || 3000;

@@ -2,6 +2,12 @@ import { createConnection } from 'typeorm';
 import { Category } from '../entities/category.entity'; // Import Category entity
 import * as sql from 'mssql';
 
+
+//curl -X GET "localhost:9200/users/_settings?pretty"
+//curl -X GET "localhost:9200/_cat/indices?v"
+//curl -X GET "localhost:9200/users/_mapping?pretty"
+//curl -X GET "localhost:9200/users/_search?pretty"
+
 const sqlConfig = {
     user: 'sa',
     password: 'Password_01',
@@ -12,6 +18,7 @@ const sqlConfig = {
         encrypt: true
     }
 };
+
 
 const createDatabase = async () => {
     try {
@@ -25,6 +32,7 @@ const createDatabase = async () => {
     }
 };
 
+ 
 export const connectDatabase = async () => {
     await createDatabase(); // Ensure the database exists
 

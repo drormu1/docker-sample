@@ -9,7 +9,7 @@ POST http://localhost:3000/categories
 Content-Type: application/json
 
 {
-  "title": "New Category"
+  "title": "New Category 1"
 }
 
 ###

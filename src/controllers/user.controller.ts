@@ -1,44 +1,52 @@
 import { Request, Response } from 'express';
+import { checkAndCreateIndex } from '../services/elasticsearchService';
 import { Client } from '@elastic/elasticsearch';
-import { User } from '../entities/user.entity';
+import dotenv from 'dotenv';
+ 
+dotenv.config();
 
-const client = new Client({
-  node: 'http://localhost:9200', // Assuming Elasticsearch is running locally on port 9200
-});
+const client = new Client({ node: 'http://localhost:9200' });
+const index = process.env.ELASTICSEARCH_INDEX || 'users';
 
-export class UserController {
-  // Get all users from Elasticsearch
-  async getUsers(req: Request, res: Response) {
-    try {
-      const response = await client.search({
-        index: 'users', // Specify the Elasticsearch index to search
-        body: {
-          query: {
-            match_all: {}, // Match all documents in the index
-          },
-        },
-      });
-      res.json(response.hits.hits); // Return the users in the response
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
+// Get all users
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    await checkAndCreateIndex(); // Ensure the index exists
+
+    
+    const response = await client.search({
+      index,
+      body: {
+        query: {
+          match_all: {}
+        }
+      }
+    });
+
+    const users = response.hits.hits.map((hit: any) => hit._source);
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error); // Log the error details 
+    res.status(500).json({ message: 'Error fetching users', error });
   }
+};
 
-  // Add a new user to Elasticsearch
-  async addUser(req: Request, res: Response) {
-    const { id, name, phone }: User = req.body;
-    try {
-      await client.index({
-        index: 'users', // Specify the Elasticsearch index
-        id: id.toString(), // Use the ID provided in the request
-        body: {
-          name,
-          phone,
-        },
-      });
-      res.status(201).json({ message: 'User added' });
-    } catch (error:any ) {
-      res.status(500).json({ error: error.message });
-    }
+// Create a new user
+export const createUser = async (req: Request, res: Response) => {
+  const { name, phone } = req.body;
+  try {
+    await checkAndCreateIndex(); // Ensure the index exists
+
+    const response = await client.index({
+      index,
+      body: {
+        name,
+        phone
+      }
+    });
+
+    res.status(201).json({ message: 'User created successfully', user: response });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating user', error });
   }
-}
+};

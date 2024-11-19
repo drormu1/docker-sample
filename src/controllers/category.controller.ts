@@ -18,7 +18,7 @@ export const createCategory = async (req: Request, res: Response) => {
   const { title } = req.body;
   try {
     const categoryRepository = getRepository(Category);
-    const category = new Category();
+    const category = new Category(title);
     category.title = title;
 
     await categoryRepository.save(category);  // Save new category to the database
