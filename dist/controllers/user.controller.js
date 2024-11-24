@@ -8,51 +8,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserController = void 0;
+exports.createUser = exports.getUsers = void 0;
+const elasticsearchService_1 = require("../services/elasticsearchService");
 const elasticsearch_1 = require("@elastic/elasticsearch");
-const client = new elasticsearch_1.Client({
-    node: 'http://localhost:9200', // Assuming Elasticsearch is running locally on port 9200
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const client = new elasticsearch_1.Client({ node: 'http://localhost:9200' });
+const index = process.env.ELASTICSEARCH_INDEX || 'users';
+// Get all users
+const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, elasticsearchService_1.checkAndCreateIndex)(); // Ensure the index exists
+        const response = yield client.search({
+            index,
+            body: {
+                query: {
+                    match_all: {}
+                }
+            }
+        });
+        const users = response.hits.hits.map((hit) => hit._source);
+        res.json(users);
+    }
+    catch (error) {
+        console.error('Error fetching users:', error); // Log the error details 
+        res.status(500).json({ message: 'Error fetching users', error });
+    }
 });
-class UserController {
-    // Get all users from Elasticsearch
-    getUsers(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const response = yield client.search({
-                    index: 'users', // Specify the Elasticsearch index to search
-                    body: {
-                        query: {
-                            match_all: {}, // Match all documents in the index
-                        },
-                    },
-                });
-                res.json(response.hits.hits); // Return the users in the response
-            }
-            catch (error) {
-                res.status(500).json({ error: error.message });
+exports.getUsers = getUsers;
+// Create a new user
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, phone } = req.body;
+    try {
+        yield (0, elasticsearchService_1.checkAndCreateIndex)(); // Ensure the index exists
+        const response = yield client.index({
+            index,
+            body: {
+                name,
+                phone
             }
         });
+        res.status(201).json({ message: 'User created successfully', user: response });
     }
-    // Add a new user to Elasticsearch
-    addUser(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id, name, phone } = req.body;
-            try {
-                yield client.index({
-                    index: 'users', // Specify the Elasticsearch index
-                    id: id.toString(), // Use the ID provided in the request
-                    body: {
-                        name,
-                        phone,
-                    },
-                });
-                res.status(201).json({ message: 'User added' });
-            }
-            catch (error) {
-                res.status(500).json({ error: error.message });
-            }
-        });
+    catch (error) {
+        res.status(500).json({ message: 'Error creating user', error });
     }
-}
-exports.UserController = UserController;
+});
+exports.createUser = createUser;

@@ -36,6 +36,10 @@ exports.connectDatabase = void 0;
 const typeorm_1 = require("typeorm");
 const category_entity_1 = require("../entities/category.entity"); // Import Category entity
 const sql = __importStar(require("mssql"));
+//curl -X GET "localhost:9200/users/_settings?pretty"
+//curl -X GET "localhost:9200/_cat/indices?v"
+//curl -X GET "localhost:9200/users/_mapping?pretty"
+//curl -X GET "localhost:9200/users/_search?pretty"
 const sqlConfig = {
     user: 'sa',
     password: 'Password_01',

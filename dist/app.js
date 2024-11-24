@@ -14,20 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("reflect-metadata");
-const category_controller_1 = require("./controllers/category.controller");
+const dotenv_1 = __importDefault(require("dotenv"));
 const typeormService_1 = require("./services/typeormService"); // Import database connection
-const user_controller_1 = require("./controllers/user.controller");
+const routes_1 = __importDefault(require("./routes")); // Import routes
+const express_handlebars_1 = require("express-handlebars");
+dotenv_1.default.config(); // Load environment variables from .env file
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
+app.use(express_1.default.json()); // Middleware to parse JSON request bodies
+app.engine('handlebars', (0, express_handlebars_1.engine)());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+// Serve static files from the public folder
+app.use(express_1.default.static('public'));
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeormService_1.connectDatabase)(); // Ensure the database is connected
-        // Define routes
-        app.get('/categories', category_controller_1.getCategories);
-        app.post('/categories', category_controller_1.createCategory);
-        const userController = new user_controller_1.UserController();
-        app.get('/users', userController.getUsers);
-        app.post('/users', userController.addUser);
+        // Use routes
+        app.use('/api', routes_1.default);
         // Start the server
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {

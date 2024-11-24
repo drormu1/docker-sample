@@ -17,7 +17,7 @@ const getCategories = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const categoryRepository = (0, typeorm_1.getRepository)(category_entity_1.Category);
         const categories = yield categoryRepository.find(); // Fetch all categories
-        res.json(categories);
+        return categories;
     }
     catch (error) {
         res.status(500).json({ message: 'Error fetching categories', error });
@@ -29,10 +29,9 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const { title } = req.body;
     try {
         const categoryRepository = (0, typeorm_1.getRepository)(category_entity_1.Category);
-        const category = new category_entity_1.Category();
-        category.title = title;
+        const category = new category_entity_1.Category(title); // Use the constructor to set the title
         yield categoryRepository.save(category); // Save new category to the database
-        res.status(201).json({ message: 'Category created successfully', category });
+        res.redirect('/categories');
     }
     catch (error) {
         res.status(500).json({ message: 'Error creating category', error });

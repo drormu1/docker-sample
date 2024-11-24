@@ -12,9 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Category = void 0;
 const typeorm_1 = require("typeorm");
 let Category = class Category {
-    constructor() {
-        this.id = 0;
-        this.title = '';
+    constructor(title) {
+        this.title = title;
     }
 };
 exports.Category = Category;
@@ -28,5 +27,5 @@ __decorate([
 ], Category.prototype, "title", void 0);
 exports.Category = Category = __decorate([
     (0, typeorm_1.Entity)('Categories'),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [String])
 ], Category);
