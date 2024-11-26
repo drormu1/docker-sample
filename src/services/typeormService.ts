@@ -8,21 +8,23 @@ import * as sql from 'mssql';
 //curl -X GET "localhost:9200/users/_mapping?pretty"
 //curl -X GET "localhost:9200/users/_search?pretty"
 
-const sqlConfig = {
+
+const dbConfig = {
     user: 'sa',
     password: 'Password_01',
-    server: 'localhost',
+    server: 'localhost', // Use the service name 'sqlserver'
     port: 1433,
+    database: 'DockerSample',
     options: {
         enableArithAbort: true,
-        encrypt: true
+        encrypt: true,
+        trustServerCertificate: true // Add this line to trust the self-signed certificate
     }
-};
-
+}; 
 
 const createDatabase = async () => {
     try {
-        const pool = await sql.connect(sqlConfig);
+        const pool = await sql.connect(dbConfig);
         await pool.request().query(`IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'DockerSample')
                                     CREATE DATABASE DockerSample`);
         console.log('Database created or already exists');
@@ -39,18 +41,15 @@ export const connectDatabase = async () => {
     try {
         await createConnection({
             type: 'mssql',
-            host: 'localhost',
-            port: 1433, // Default SQL Server port
-            username: 'sa',
-            password: 'Password_01',
-            database: 'DockerSample',
+            host: dbConfig.server,
+            port: dbConfig.port, // Default SQL Server port
+            username: dbConfig.user,
+            password: dbConfig.password,
+            database: dbConfig.database,
             synchronize: true, // Automatically sync database schema with entities
             logging: true,
             entities: [Category],
-            options: {
-                enableArithAbort: true, // Add this line to avoid deprecation warning
-                encrypt: true // Use encryption
-            }
+            options: dbConfig.options
         });
         console.log('Connected to SQL Server successfully');
     } catch (error) {

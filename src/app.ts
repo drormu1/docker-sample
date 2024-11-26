@@ -7,8 +7,9 @@ import { getCategories, createCategory } from './controllers/category.controller
 import routes from './routes'; // Import routes
 import { engine } from 'express-handlebars';
 import exphbs from 'express-handlebars';
-
+import logger from './logger'; // Import logger
 import Handlebars from 'handlebars';
+import loggerMiddleware from './middleware/loggerMiddleware';
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -16,7 +17,8 @@ dotenv.config(); // Load environment variables from .env file
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data
-
+// Use logger middleware
+app.use(loggerMiddleware);
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
@@ -35,10 +37,11 @@ const startServer = async () => {
         // Start the server
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+            //console.log();
+            logger.debug(`Server is running on port ${PORT}`);
         });
     } catch (error) {
-        console.error('Error connecting to the database', error);
+        logger.error('Error connecting to the database', error);        
         process.exit(1); // Exit if the connection fails
     }
 };

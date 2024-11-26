@@ -29,3 +29,5 @@ or
 `http://localhost:3000/categories`
 
 
+
+if nodemon not restart the app, the just type 'rs' in the termainl of vscode

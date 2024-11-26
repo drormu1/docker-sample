@@ -19,7 +19,8 @@
     "handlebars-layouts": "^3.1.4",
     "mssql": "^9.1.1",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.6"
+    "typeorm": "^0.3.6",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
