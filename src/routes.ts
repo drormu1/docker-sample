@@ -5,6 +5,15 @@ import { getCategories, createCategory } from './controllers/category.controller
 const router = Router();
 
 // Define routes
+
+router.get('/test', async (req, res) => {
+    try {
+        res.send('Hello from Express');
+    } catch (error) {
+        res.status(500).send('Error fetching categories');
+    }
+});
+
 router.get('/categories', async (req, res) => {
     try {
         const categories = await getCategories(req, res);

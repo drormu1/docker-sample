@@ -2,6 +2,26 @@
 
 
 services:
+  # app:
+  #   image: docker-sample:v1
+  #   build:
+  #     context: .
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - sqlserver
+  #     - elasticsearch
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DATABASE_HOST=localhostdo
+  #     - DATABASE_PORT=1433
+  #     - DATABASE_USER=sa
+  #     - DATABASE_PASSWORD=Password_01
+  #     - DATABASE_NAME=DockerSample
+  #     - ELASTICSEARCH_NODE=http://elasticsearch:9200
+  #     - ELASTICSEARCH_INDEX=users
+
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: MsSqlServer2019
