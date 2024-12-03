@@ -46,7 +46,7 @@ const userController = {
       });
 
       const users = response.hits.hits.map((hit: any) => hit._source);
-      res.json(users);
+      return users;
     } catch (error) {
       logger.error('Error fetching users:', error); // Log the error details
       res.status(500).json({ message: 'Error fetching users', error });
@@ -66,8 +66,8 @@ const userController = {
           phone
         }
       });
-
-      res.status(201).json({ message: 'User created successfully', user: response });
+      res.redirect('/users');
+      //res.status(201).json({ message: 'User created successfully', user: response });
     } catch (error) {
       logger.error('Error creating user:', error); // Log the error details
       res.status(500).json({ message: 'Error creating user', error });
