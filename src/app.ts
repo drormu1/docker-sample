@@ -2,8 +2,7 @@ import express from 'express';
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 import { connectDatabase } from './services/typeormService'; // Import database connection
-import { getUsers, createUser } from './controllers/user.controller';
-import { getCategories, createCategory } from './controllers/category.controller';
+
 import routes from './routes'; // Import routes
 import { engine } from 'express-handlebars';
 import exphbs from 'express-handlebars';

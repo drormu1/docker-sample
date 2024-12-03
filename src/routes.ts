@@ -1,36 +1,50 @@
 import { Router } from 'express';
-import { getUsers, createUser } from './controllers/user.controller';
-import { getCategories, createCategory } from './controllers/category.controller';
+import userController from './controllers/user.controller';
+import categoryController from './controllers/category.controller';
 
 const router = Router();
 
-// Define routes
-
-router.get('/test', async (req, res) => {
-    try {
-        res.send('Hello from Express');
-    } catch (error) {
-        res.status(500).send('Error fetching categories');
-    }
-});
-
+// Define routes for categories
 router.get('/categories', async (req, res) => {
     try {
-        const categories = await getCategories(req, res);
+        const categories = await categoryController.getCategories(req, res);
         res.render('showCategories', { title: 'All Categories', categories });
     } catch (error) {
         res.status(500).send('Error fetching categories');
     }
 });
 
-router.post('/categories', createCategory);
+router.post('/categories', categoryController.createCategory);
 
 router.get('/add-category', (req, res) => {
     res.render('addCategory', { title: 'Add Category' });
 });
 
+// Define routes for users
+router.get('/users', async (req, res) => {
+    try {
+        const users = await userController.getUsers(req, res);
+        res.render('showUsers', { title: 'All Users', users });
+    } catch (error) {
+        res.status(500).send('Error fetching users');
+    }
+});
 
-router.get('/users', getUsers);
-router.post('/users', createUser);
+router.post('/users', userController.createUser);
 
-export default router;
+router.get('/add-user', (req, res) => {
+    res.render('addUser', { title: 'Add User' });
+});
+
+router.get('/test', (req, res) => {
+    res.send('response from test route');
+});
+
+router.get('/', (req, res) => {
+    //res.send('response from root route');
+    res.redirect('/categories');
+});
+
+
+
+export default router; 
