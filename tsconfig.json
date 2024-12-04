@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",                      // Use the latest ECMAScript features
     "module": "commonjs",                      // Use ES Modules
+    
     "moduleResolution": "node",              // Resolve modules in Node.js style
     "esModuleInterop": true,                 // Enable compatibility for CommonJS modules
     "outDir": "./dist",                      // Output compiled JS files to 'dist' folder
@@ -17,5 +18,6 @@
     }
   },
   "include": ["src/**/*"],                   // Include all files in 'src' directory
+  "exclude": ["node_modules", "dist"]
         // Exclude 'node_modules' from compilation
 }

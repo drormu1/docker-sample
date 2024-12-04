@@ -40,19 +40,21 @@ const sql = __importStar(require("mssql"));
 //curl -X GET "localhost:9200/_cat/indices?v"
 //curl -X GET "localhost:9200/users/_mapping?pretty"
 //curl -X GET "localhost:9200/users/_search?pretty"
-const sqlConfig = {
+const dbConfig = {
     user: 'sa',
     password: 'Password_01',
-    server: 'localhost',
+    server: 'localhost', // Use the service name 'sqlserver'
     port: 1433,
+    database: 'DockerSample',
     options: {
         enableArithAbort: true,
-        encrypt: true
+        encrypt: true,
+        trustServerCertificate: true // Add this line to trust the self-signed certificate
     }
 };
 const createDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const pool = yield sql.connect(sqlConfig);
+        const pool = yield sql.connect(dbConfig);
         yield pool.request().query(`IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'DockerSample')
                                     CREATE DATABASE DockerSample`);
         console.log('Database created or already exists');
@@ -67,18 +69,15 @@ const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
             type: 'mssql',
-            host: 'localhost',
-            port: 1433, // Default SQL Server port
-            username: 'sa',
-            password: 'Password_01',
-            database: 'DockerSample',
+            host: dbConfig.server,
+            port: dbConfig.port, // Default SQL Server port
+            username: dbConfig.user,
+            password: dbConfig.password,
+            database: dbConfig.database,
             synchronize: true, // Automatically sync database schema with entities
             logging: true,
             entities: [category_entity_1.Category],
-            options: {
-                enableArithAbort: true, // Add this line to avoid deprecation warning
-                encrypt: true // Use encryption
-            }
+            options: dbConfig.options
         });
         console.log('Connected to SQL Server successfully');
     }

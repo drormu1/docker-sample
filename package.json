@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec ts-node src/app.ts",
-    "build": "tsc",
-    "serve": "node ./dist/app.js"
+  "scripts": {    
+    "build": "tsc && npm run clean-views && npm run copy-views",
+    "copy-views": "xcopy src\\views dist\\views /E /I /Y",
+    "clean-views": "rimraf dist/views",
+    "start": "npm run build && nodemon dist/app.js"
   },
+  "build": "tsc && npm run copy-views",
+  "copy-views": "cp -r src/views dist/views",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,7 +20,7 @@
     "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
     "handlebars-layouts": "^3.1.4",
-    "mssql": "^9.1.1",
+    "mssql": "^11.0.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.6",
     "winston": "^3.17.0"
@@ -27,6 +30,7 @@
     "@types/mssql": "^9.1.5",
     "@types/node": "^22.9.0",
     "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.0"

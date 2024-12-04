@@ -8,7 +8,7 @@ const router = Router();
 router.get('/categories', async (req, res) => {
     try {
         const categories = await categoryController.getCategories(req, res);
-        res.render('showCategories', { title: 'All Categories', categories });
+        res.render('categories', { title: 'All Categories', categories });
     } catch (error) {
         res.status(500).send('Error fetching categories');
     }
@@ -24,7 +24,8 @@ router.get('/add-category', (req, res) => {
 router.get('/users', async (req, res) => {
     try {
         const users = await userController.getUsers(req, res);
-        res.render('showUsers', { title: 'All Users', users });
+        //res.render('showUsers', { title: 'All Users', users });
+        res.render('users', { layout: 'main', users, title: 'All Users'});
     } catch (error) {
         res.status(500).send('Error fetching users');
     }

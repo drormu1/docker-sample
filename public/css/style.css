@@ -6,33 +6,28 @@ body {
 }
 
 h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
     color: #333;
+    text-decoration: none;
 }
 
-form {
-    margin: 20px 0;
+a:hover {
+    text-decoration: underline;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+ul {
+    list-style: none;
+    padding: 0;
 }
 
-input[type="text"] {
-    padding: 5px;
-    margin-bottom: 10px;
-    width: 100%;
-    max-width: 300px;
-}
-
-button {
-    padding: 10px 15px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #555;
+ul li {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }

@@ -1,7 +1,9 @@
         <h1>All Users</h1>
-        <a href="/add-user">Add New User</a> <!-- Link to Add User page -->
+      
         <ul>
             {{#each users}}
                 <li>{{this.name}} - {{this.phone}}</li>
             {{/each}}
         </ul>
+        <br>
+          <a href="/add-user">Add New User</a> <!-- Link to Add User page -->

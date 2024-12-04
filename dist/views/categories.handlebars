@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Categories</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>All Categories</h1>
+   
+    <ul>
+        {{#each categories}}
+            <li>{{this.title}}</li>
+        {{/each}}
+    </ul>
+
+    <br>
+     <a href="/add-category">Add New Category</a> <!-- Link to Add Category page -->
+</body>
+</html>
